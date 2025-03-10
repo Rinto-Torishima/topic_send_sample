@@ -1,4 +1,4 @@
-## firebase topic指定送信　サンプル
+## firebase topic指定通知送信　サンプル
 
 ### 環境構築
 * frontendディレクトリの下記ファイルの設定を自分の環境に変更
