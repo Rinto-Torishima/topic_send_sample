@@ -1,0 +1,23 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: backend/docker/Dockerfile
+    image: php:8.2-fpm
+    container_name: php_app
+    volumes:
+      - ./backend/public:/var/www/html # PHP が /var/www/html を見れるようにする
+      - ./backend/vendor:/var/www/vendor
+      - ./backend/config:/var/www/config
+      - ./backend/.env:/var/www/.env
+  nginx:
+    image: nginx:latest
+    container_name: nginx_app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend/docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/docker/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend/public:/var/www/html # Nginx も /var/www/html を見れるようにする
+    depends_on:
+      - php

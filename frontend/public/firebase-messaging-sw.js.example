@@ -1,0 +1,50 @@
+importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js");
+
+// Firebase設定
+// 実際の値は.envファイルから取得するか、自分の環境に合わせて設定してください
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+// バックグラウンドメッセージを受信したときの処理
+messaging.onBackgroundMessage((payload) => {
+  console.log("バックグラウンド通知:", payload);
+  self.registration.showNotification(payload.notification.title, {
+    body: payload.notification.body,
+    icon: "/firebase-logo.png",
+  });
+});
+
+// 通知がクリックされたときの処理
+self.addEventListener("notificationclick", function (event) {
+  console.log("通知がクリックされました", event.notification);
+
+  event.notification.close(); // 通知を閉じる
+
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((windowClients) => {
+      // 既に開いているタブがあればフォーカスする
+      for (let client of windowClients) {
+        // 本番環境のURLに変更してください
+        if (client.url === "http://localhost:5173/" && "focus" in client) {
+          return client.focus();
+        }
+      }
+
+      // 新しくウィンドウを開く
+      if (clients.openWindow) {
+        // 本番環境のURLに変更してください
+        return clients.openWindow("http://localhost:5173/");
+      }
+    })
+  );
+});
