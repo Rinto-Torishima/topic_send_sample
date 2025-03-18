@@ -10,7 +10,13 @@
 
     <div class="topic-input-group">
       <input v-model="topicName" placeholder="トピック名を入力" />
+    </div>
+
+    <div class="topic-input-group">
       <button @click="subscribeToTopic">トピックを登録</button>
+    </div>
+
+    <div class="topic-input-group">
       <button @click="unsubscribeFromTopic" class="unsubscribe">トピックの購読を解除</button>
     </div>
 
@@ -98,7 +104,7 @@ onMounted(async () => {
 
 <style scoped>
 .container {
-  max-width: 600px;
+  max-width: 500px;
   margin: 2rem auto;
   text-align: center;
   background: #ffffff;
@@ -119,9 +125,8 @@ h2 {
 }
 
 .topic-input-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  display: block;
+  text-align: center;
   margin-bottom: 1rem;
 }
 
