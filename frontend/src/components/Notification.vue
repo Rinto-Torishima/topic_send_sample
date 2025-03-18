@@ -10,7 +10,8 @@
 
     <div class="topic-input-group">
       <input v-model="topicName" placeholder="トピック名を入力" />
-      <button @click="subscribeToTopic">トピック登録</button>
+      <button @click="subscribeToTopic">トピックを登録</button>
+      <button @click="unsubscribeFromTopic" class="unsubscribe">トピックの購読を解除</button>
     </div>
 
     <router-link to="/notification_form" class="link">通知送信フォームへ</router-link>
@@ -56,7 +57,39 @@ const subscribeToTopic = async () => {
   }
 };
 
-onMounted(() => {
+const unsubscribeFromTopic = async () => {
+  if (!fcmToken.value) {
+    alert("まず通知を許可してください");
+    return;
+  }
+  if (!topicName.value.trim()) {
+    alert("トピック名を入力してください");
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/unsubscribe-topic.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: fcmToken.value,
+        topic: topicName.value,
+      }),
+    });
+    const result = await response.json();
+    alert(result.message);
+  } catch (error) {
+    console.error("トピック購読解除エラー:", error);
+  }
+};
+
+onMounted(async () => {
+  // 通知がすでに許可されていればトークンを取得
+  if (Notification.permission === "granted") {
+    fcmToken.value = await requestForToken();
+  }
   onMessageListener().then((payload) => {
     alert(`新しい通知: ${payload.notification.title}`);
   });
@@ -133,4 +166,13 @@ button:hover {
 .link:hover {
   text-decoration: underline;
 }
+
+.unsubscribe {
+  background: #dc3545;
+}
+
+.unsubscribe:hover {
+  background: #a71d2a;
+}
+
 </style>
