@@ -15,15 +15,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// バックグラウンドメッセージを受信したときの処理
-messaging.onBackgroundMessage((payload) => {
-  console.log("バックグラウンド通知:", payload);
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
-    icon: "/firebase-logo.png",
-  });
-});
-
 // 通知がクリックされたときの処理
 self.addEventListener("notificationclick", function (event) {
   console.log("通知がクリックされました", event.notification);
