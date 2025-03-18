@@ -4,7 +4,7 @@
 
     <div class="form-group">
       <label for="topic">トピック:</label>
-      <input id="topic" v-model="topic" type="text" placeholder="例: event_updates" />
+      <input id="topic" v-model="topic" type="text" placeholder="トピック名" />
     </div>
 
     <div class="form-group">
@@ -23,6 +23,9 @@
 
     <div v-if="result" class="result">
       {{ result }}
+    </div>
+    <div class="back-link-wrapper">
+      <router-link to="/" class="back-link">戻る</router-link>
     </div>
   </div>
 </template>
@@ -130,5 +133,23 @@ button:hover {
   border-left: 5px solid #007bff;
   color: #333;
   text-align: left;
+}
+
+.button-wrapper,
+.back-link-wrapper {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-decoration: underline;
 }
 </style>
