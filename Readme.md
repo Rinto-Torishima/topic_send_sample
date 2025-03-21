@@ -11,7 +11,7 @@
 ### 必要条件
 
 - Docker
-- ngrok (localhostまたはhttpsでないとwebpush(プッシュ通知)を受け取れないためiphoneなどで動かす場合はhttpsで動かす必要がある)
+- ngrok (localhostまたはhttpsでないとwebpush(プッシュ通知)が動かないため、iphoneなどで動かす場合はhttpsで動かす必要がある)
 - iOS 16.4以上のデバイス（Safari）→ iphoneを使って受信する場合
 
 ### 環境構築
