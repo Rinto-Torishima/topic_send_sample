@@ -29,6 +29,10 @@ import { ref, onMounted } from "vue";
 import { requestForToken, onMessageListener } from "../firebase";
 import type { MessagePayload } from "firebase/messaging";
 
+interface TopicResponse {
+  message: string
+}
+
 const fcmToken = ref<string | undefined>("");
 const topicName = ref(""); // ユーザーが入力するトピック名
 
@@ -57,7 +61,7 @@ const subscribeToTopic = async () => {
         topic: topicName.value,
       }),
     });
-    const result = await response.json();
+    const result : TopicResponse = await response.json();
     alert(result.message);
   } catch (error) {
     console.error("トピック登録エラー:", error);
@@ -85,7 +89,7 @@ const unsubscribeFromTopic = async () => {
         topic: topicName.value,
       }),
     });
-    const result = await response.json();
+    const result : TopicResponse = await response.json();
     alert(result.message);
   } catch (error) {
     console.error("トピック購読解除エラー:", error);
