@@ -30,14 +30,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 
-const topic = ref("");
-const title = ref("");
-const message = ref("");
-const isLoading = ref(false);
-const result = ref(null);
+const topic = ref<string>("");
+const title = ref<string>("");
+const message = ref<string>("");
+const isLoading = ref<boolean>(false);
+const result = ref<string | null>(null);
+
+interface SendNotificationResponse {
+  success: boolean
+  error?: string
+}
 
 const sendNotification = async () => {
   if (!topic.value || !title.value || !message.value) {
@@ -64,7 +69,11 @@ const sendNotification = async () => {
       ? "通知が正常に送信されました"
       : `エラー: ${data.error || "不明なエラー"}`;
   } catch (error) {
-    result.value = `エラー: ${error.message}`;
+    if (error instanceof Error) {
+      result.value = `エラー: ${error.message}`
+    } else {
+      result.value = "不明なエラーが発生しました"
+    }
   } finally {
     isLoading.value = false;
   }

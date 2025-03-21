@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken, onMessage ,type MessagePayload} from "firebase/messaging";
 
 // Firebase 設定
 const firebaseConfig = {
@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 // FCM トークンを取得
-export const requestForToken = async () => {
+export const requestForToken = async (): Promise<string | undefined> => {
   try {
     const token = await getToken(messaging, {
       vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
@@ -34,7 +34,7 @@ export const requestForToken = async () => {
 };
 
 // メッセージ受信イベントを登録
-export const onMessageListener = () =>
+export const onMessageListener = (): Promise<MessagePayload> =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       console.log("受信したメッセージ:", payload);

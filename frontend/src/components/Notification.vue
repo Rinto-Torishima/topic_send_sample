@@ -24,11 +24,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { requestForToken, onMessageListener } from "../firebase";
+import type { MessagePayload } from "firebase/messaging";
 
-const fcmToken = ref("");
+const fcmToken = ref<string | undefined>("");
 const topicName = ref(""); // ユーザーが入力するトピック名
 
 const getNotificationToken = async () => {
@@ -96,8 +97,8 @@ onMounted(async () => {
   if (Notification.permission === "granted") {
     fcmToken.value = await requestForToken();
   }
-  onMessageListener().then((payload) => {
-    alert(`新しい通知: ${payload.notification.title}`);
+  onMessageListener().then((payload: MessagePayload) => {
+    alert(`新しい通知: ${payload.notification?.title ?? "タイトルなし"}`)
   });
 });
 </script>
