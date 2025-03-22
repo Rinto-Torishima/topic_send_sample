@@ -31,7 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { onMessageListener } from "../firebase";
+import type { MessagePayload } from "firebase/messaging";
 
 const topic = ref<string>("");
 const title = ref<string>("");
@@ -78,6 +80,12 @@ const sendNotification = async () => {
     isLoading.value = false;
   }
 };
+
+onMounted(() => {
+  onMessageListener().then((payload: MessagePayload) => {
+    alert(`新しい通知: ${payload.notification?.title ?? "タイトルなし"}`);
+  });
+});
 </script>
 
 <style scoped>
