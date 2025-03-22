@@ -28,6 +28,10 @@
 import { ref, onMounted } from "vue";
 import { requestForToken, onMessageListener } from "../firebase";
 import type { MessagePayload } from "firebase/messaging";
+import {
+  subscribeToTopic as callSubscribeToTopic,
+  unsubscribeFromTopic as callUnsubscribeFromTopic,
+} from "../composables/useTopic"
 
 interface TopicResponse {
   message: string
@@ -51,17 +55,7 @@ const subscribeToTopic = async () => {
   }
 
   try {
-    const response = await fetch("/api/subscribe-topic.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: fcmToken.value,
-        topic: topicName.value,
-      }),
-    });
-    const result : TopicResponse = await response.json();
+    const result = await callSubscribeToTopic(fcmToken.value, topicName.value);
     alert(result.message);
   } catch (error) {
     console.error("トピック登録エラー:", error);
@@ -79,17 +73,7 @@ const unsubscribeFromTopic = async () => {
   }
 
   try {
-    const response = await fetch("/api/unsubscribe-topic.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: fcmToken.value,
-        topic: topicName.value,
-      }),
-    });
-    const result : TopicResponse = await response.json();
+    const result = await callUnsubscribeFromTopic(fcmToken.value, topicName.value);
     alert(result.message);
   } catch (error) {
     console.error("トピック購読解除エラー:", error);
